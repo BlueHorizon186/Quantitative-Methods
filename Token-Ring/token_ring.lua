@@ -193,6 +193,25 @@ function token_ring_mat()
 
   -- Mu Transitions (Send Packets)
 
+  tr[133][93]  = tr[133][93]  + mu
+  tr[134][121] = tr[134][121] + mu
+  tr[135][129] = tr[135][129] + mu
+  tr[130][89]  = tr[130][89]  + mu
+  tr[131][117] = tr[131][117] + mu
+  tr[132][125] = tr[132][125] + mu
+  tr[126][84]  = tr[126][84]  + mu
+  tr[127][112] = tr[127][112] + mu
+  tr[122][79]  = tr[122][79]  + mu
+  tr[123][107] = tr[123][107] + mu
+  tr[124][116] = tr[124][116] + mu
+  tr[118][74]  = tr[118][74]  + mu
+  tr[119][103] = tr[119][103] + mu
+  tr[120][111] = tr[120][111] + mu
+  tr[113][68]  = tr[113][68]  + mu
+  tr[114][98]  = tr[114][98]  + mu
+
+  -- Define values for self-transitions
+
   for j = 1, states do
     sum = 0
     for k = 1, states do
