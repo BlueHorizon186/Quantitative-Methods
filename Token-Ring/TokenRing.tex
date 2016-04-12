@@ -1,0 +1,411 @@
+\documentclass{article}
+
+\usepackage{tikz}
+\usepackage{verbatim}
+
+\usetikzlibrary{calc,backgrounds}
+\usepackage[active,tightpage]{preview}
+
+\begin{document}
+  \begin{preview}
+  \begin{tikzpicture}[>=latex]
+  
+  \newcommand{\lone}{$\lambda1$}
+  \newcommand{\ltwo}{$\lambda2$}
+  \newcommand{\mone}{$\mu1$}
+  \newcommand{\mtwo}{$\mu2$}
+  \newcommand{\wone}{$\omega1$}
+  \newcommand{\wtwo}{$\omega2$}
+
+    % *******************************************
+    %     Styles for states, and state edges
+    % *******************************************
+
+    \tikzstyle{state} = [draw, thin, fill=white, circle,
+    minimum width=1cm, node distance=2.05cm, font={\sffamily\bfseries}];
+
+    \tikzstyle{stateEdgePortion} = [black, thin];
+    \tikzstyle{stateEdge} = [stateEdgePortion,->];
+    
+    \tikzstyle{edgeLabel} = [pos=0.5, text centered,
+    font={\sffamily\small}];
+
+    % *******************************************
+    %              Position States
+    % *******************************************
+    
+    % *******************************************
+    %             Token 1 Ready States
+    % *******************************************
+
+    \node[state, name=NoPckTk1] {001};
+    \node[state, name=P1P0T1, right of=NoPckTk1] {101};
+    \node[state, name=P0P1T1, right of=P1P0T1] {011};
+    \node[state, name=P2P0T1, left of=P1P0T1, below of=P1P0T1, xshift=0.8cm, yshift=0.3cm] {201};
+    \node[state, name=P1P1T1, right of=P2P0T1] {111};
+    \node[state, name=P0P2T1, right of=P1P1T1] {021};
+    \node[state, name=P2P1T1, right of=P0P1T1] {211};
+    \node[state, name=P1P2T1, right of=P2P1T1] {121};
+    \node[state, name=P2P2T1, right of=P0P2T1] {221};
+    
+    % *******************************************
+    %           Token 1 Depleted States
+    % *******************************************
+    
+    \node[state, name=P0P0T1D, right of=P1P2T1, yshift=-0.5cm] {001-};
+    \node[state, name=P1P1T1D, right of=P0P0T1D] {111-};
+    \node[state, name=P0P1T1D, right of=P0P0T1D, below of=P0P0T1D, xshift=-0.8cm, yshift=0.3cm] {011-};
+    \node[state, name=P1P0T1D, right of=P0P1T1D] {101-};
+    \node[state, name=P0P2T1D, right of=P1P1T1D] {021-};
+    \node[state, name=P1P2T1D, right of=P1P0T1D] {121-};
+    
+    % *******************************************
+    %             Token 2 Ready States
+    % *******************************************
+    
+    \node[state, name=NoPckTk2, below of=NoPckTk1, yshift=-7.5cm] {002};
+    \node[state, name=P1P0T2, below of=P1P0T1, yshift=-7.5cm] {102};
+    \node[state, name=P0P1T2, below of=P0P1T1, yshift=-7.5cm] {012};
+    \node[state, name=P2P0T2, below of=P2P0T1, xshift=0.2cm, yshift=-3.4cm] {202};
+    \node[state, name=P1P1T2, below of=P1P1T1, xshift=0.2cm, yshift=-4.6cm] {112};
+    \node[state, name=P0P2T2, right of= P1P1T2, yshift=0.3cm] {022};
+    \node[state, name=P2P1T2, below of=P2P1T1, yshift=-7.5cm] {212};
+    \node[state, name=P1P2T2, right of=P2P1T2, xshift=-0.2cm] {122};
+    \node[state, name=P2P2T2, below of=P2P1T2, yshift=-1.5cm]{222};
+    
+    % *******************************************
+    %           Token 2 Depleted States
+    % *******************************************
+    
+    \node[state, name=P0P0T2D, right of=P1P2T2] {002-};
+    \node[state, name=P1P1T2D, right of=P0P0T2D] {112-};
+    \node[state, name=P0P1T2D, above of=P0P0T2D, right of=P0P0T2D, xshift=-0.8cm, yshift=-0.2cm]{012-};
+    \node[state, name=P1P0T2D, right of=P1P1T2D]{102-};
+    \node[state, name=P2P0T2D, right of=P1P0T2D]{202-};
+    \node[state, name=P2P1T2D, above of=P1P0T2D, left of=P2P0T2D, xshift=0.8cm]{212-};
+    
+    % *******************************************
+    %              Connecting Edges
+    % *******************************************
+    
+    % *******************************************
+    %             Lambdas in Token 1
+    % *******************************************
+
+    % From 001 to 101
+    \draw(NoPckTk1.east)
+    edge[stateEdge] node[edgeLabel, yshift=0.2cm]{\lone}
+    (P1P0T1.west);
+
+    % From 001 to 011
+    \draw($(NoPckTk1.east) + (-0.1cm,0.3cm)$)
+    edge[stateEdge, bend left=33.5] node[edgeLabel, yshift=0.2cm]{\ltwo}
+    ($(P0P1T1.west) + (0.05cm,0.2cm)$);
+
+    % From 101 to 201
+    \draw($(P1P0T1.west) + (0.1cm,-0.3cm)$)
+    edge[stateEdge, bend right=22.5] node[edgeLabel, xshift=-0.2cm, yshift=0.1cm]{\lone}
+    ($(P2P0T1.north) + (0.2cm,-0.1cm)$);
+
+    % From 101 to 111
+    \draw($(P1P0T1.east) + (-0.1cm,-0.3cm)$)
+    edge[stateEdge, bend left=22.5] node[edgeLabel, yshift=0.1cm]{\ltwo}
+    ($(P1P1T1.north) + (-0.2cm,-0.1cm)$);
+
+    % From 011 to 111
+    \draw($(P0P1T1.west) + (0.1cm,-0.3cm)$)
+    edge[stateEdge, bend right=22.5] node[edgeLabel, yshift=0.1cm]{\lone}
+    ($(P1P1T1.north) + (0.2cm,-0.1cm)$);
+
+    % From 011 to 021
+    \draw($(P0P1T1.east) + (-0.1cm,-0.3cm)$)
+    edge[stateEdge, bend left=22.5] node[edgeLabel, xshift=-0.2cm, yshift=0.1cm]{\ltwo}
+    ($(P0P2T1.north) + (-0.2cm,-0.1cm)$);
+    
+    % From 201 to 211
+    \coordinate (201A) at ($(P2P0T1.south) + (-0.2cm,-0.8cm)$);
+    \coordinate (201B) at ($(P2P0T1.south -| P2P1T1.south) + (0,-0.8cm)$);
+    \draw($(P2P0T1.south) + (-0.2cm,0.05cm)$) edge[stateEdgePortion] (201A);
+    \draw(201A) edge[stateEdgePortion] node[edgeLabel, yshift=0.1cm]{\ltwo} (201B);
+    \draw(201B) edge[stateEdge] (P2P1T1.south);
+    
+    % From 111 to 211
+    \coordinate (111A) at ($(P1P1T1.south) + (0,-0.2cm)$);
+    \coordinate (111B) at ($(P1P1T1.south -| P2P1T1.south) + (-0.2cm,-0.2cm)$);
+    \draw(P1P1T1.south) edge[stateEdgePortion] (111A);
+    \draw(111A) edge[stateEdgePortion] node[edgeLabel, yshift=0.1cm]{\lone} (111B);
+    \draw(111B) edge[stateEdge] ($(P2P1T1.south) + (-0.2cm,0.05cm)$);
+    
+    % From 021 to 121
+    \coordinate (021A) at ($(P0P2T1.south) + (0,-0.55cm)$);
+    \coordinate (021B) at ($(P0P2T1.south -| P1P2T1.south) + (0,-0.55cm)$);
+    \draw(P0P2T1.south) edge[stateEdgePortion] (021A);
+    \draw(021A) edge[stateEdgePortion] node[edgeLabel, yshift=0.1cm]{\lone} (021B);
+    \draw(021B) edge[stateEdge] ($(P1P2T1.south) + (0,0.05cm)$);
+    
+    % From 211 to 221
+    \draw($(P2P1T1.east) + (-0.1cm,-0.3cm)$)
+    edge[stateEdge, bend left=22.5] node[edgeLabel, xshift=-0.2cm]{\ltwo}
+    ($(P2P2T1.north) + (-0.2cm,-0.1cm)$);
+    
+    % From 121 to 221
+    \draw($(P1P2T1.west) + (0.1cm,-0.3cm)$)
+    edge[stateEdge, bend right=22.5] node[edgeLabel, xshift=0.2cm]{\lone}
+    ($(P2P2T1.north) + (0.2cm,-0.1cm)$);
+    
+    % From 111 to 121
+    \coordinate (111C) at ($(P1P1T1.south) + (-0.2cm,-1.15cm)$);
+    \coordinate (111D) at ($(P1P1T1.south -| P1P2T1.south) + (0.2cm,-1.15cm)$);
+    \draw($(P1P1T1.south) + (-0.2cm,0.05cm)$) edge[stateEdgePortion] (111C);
+    \draw(111C) edge[stateEdgePortion] node[edgeLabel, yshift=0.1cm]{\ltwo} (111D);
+    \draw(111D) edge[stateEdge] ($(P1P2T1.south) + (0.2cm,0.05cm)$);
+    
+    % *******************************************
+    %               Mus in Token 1
+    % *******************************************
+    
+    % From 101 to 001D
+    \draw($(P1P0T1.east) + (-0.05cm,0.2cm)$)
+    edge[stateEdge, bend left=35.5] node[edgeLabel, yshift=0.2cm]{\mone}
+    ($(P0P0T1D.west) + (0.05cm,0.2cm)$);
+    
+    % From 211 to 111D
+    \draw($(P2P1T1.east) + (-0.05cm,0.2cm)$)
+    edge[stateEdge, bend left=29.5] node[edgeLabel, yshift=0.2cm]{\mone}
+    ($(P1P1T1D.west) + (0.05cm,0.2cm)$);
+    
+    % From 111 to 011D
+    \draw($(P1P1T1.south) + (0.2cm,0.05cm)$)
+    edge[stateEdge, bend right=45.5] node[edgeLabel, yshift=0.2cm]{\mone}
+    ($(P0P1T1D.west) + (0.05cm,-0.2cm)$);
+    
+    % From 201 to 101D
+    \draw(P2P0T1.south)
+    edge[stateEdge, bend right=39.5] node[edgeLabel, yshift=0.2cm]{\mone}
+    ($(P1P0T1D.west) + (0.05cm,-0.2cm)$);
+    
+    % From 121 to 021D
+    \draw($(P1P2T1.east) + (-0.1cm,0.25cm)$)
+    edge[stateEdge, bend left=33.5] node[edgeLabel, yshift=0.2cm]{\mone}
+    ($(P0P2T1D.west) + (0.05cm,0.2cm)$);
+    
+    % From 221 to 121D
+    \draw($(P2P2T1.south) + (0.2cm,0.05cm)$)
+    edge[stateEdge, bend right=33.5] node[edgeLabel, yshift=0.2cm]{\mone}
+    ($(P1P2T1D.west) + (0.05cm,-0.2cm)$);
+    
+    % *******************************************
+    %             Omegas in Token 1
+    % *******************************************
+    
+    % From 001 to 002
+    \draw(NoPckTk1.south)
+    edge[stateEdge] node[edgeLabel, xshift=0.25cm]{\wone}
+    (NoPckTk2.north);
+    
+    % From 001D to 002
+    \draw(P0P0T1D.south)
+    edge[stateEdge] node[edgeLabel, xshift=-1.9cm, yshift=-1.3cm]{\wone}
+    (NoPckTk2.east);
+    
+    % From 011 to 012
+    \draw(P0P1T1.south)
+    edge[stateEdge] node[edgeLabel, xshift=0.3cm, yshift=-0.2cm]{\wone}
+    (P0P1T2.north);
+    
+    % From 021 to 022
+    \draw(P0P2T1.south)
+    edge[stateEdge] node[edgeLabel, xshift=0.3cm, yshift=-1.2cm]{\wone}
+    (P0P2T2.north);
+    
+    % From 121D to 122
+    \draw(P1P2T1D.south)
+    edge[stateEdge] node[edgeLabel, xshift=2.5cm, yshift=2.4cm]{\wone}
+    (P1P2T2.north);
+    
+    % From 101D to 102
+    \coordinate (101D-A) at ($(P1P0T1D.south) + (0,-11.6cm)$);
+    \coordinate (101D-B) at ($(P1P0T1D.south -| P1P0T2.south) + (0cm,-11.6cm)$);
+    \draw(P1P0T1D.south) edge[stateEdgePortion] (101D-A);
+    \draw(101D-A) edge[stateEdgePortion] node[edgeLabel, yshift=-0.1cm]{\wone} (101D-B);
+    \draw(101D-B) edge[stateEdge] (P1P0T2.south);
+    
+    % From 111D to 112
+    \draw($(P1P1T1D.south) + (-0.2cm,0.05cm)$)
+    edge[stateEdge] node[edgeLabel, xshift=2.9cm, yshift=2.8cm]{\wone}
+    ($(P1P1T2.east) + (-0.05cm,0.2cm)$);
+    
+    % From 011D to 012
+    \draw(P0P1T1D.south)
+    edge[stateEdge] node[edgeLabel, xshift=1.9cm, yshift=1.6cm]{\wone}
+    (P0P1T2.east);
+    
+    % From 021D to 022
+    \coordinate (021D-A) at ($(P0P2T1D.east) + (2cm,0)$);
+    \coordinate (021D-B) at ($(P0P2T1D.east -| P0P2T2.south) + (11.8cm,-17.2cm)$);
+    \coordinate (021D-C) at ($(P0P2T1D.east -| P0P2T2.south) + (0cm,-17.2cm)$);
+    \draw(P0P2T1D.east) edge[stateEdgePortion] (021D-A);
+    \draw(021D-A) edge[stateEdgePortion] (021D-B);
+    \draw(021D-B) edge[stateEdgePortion] node[edgeLabel, yshift=-0.1cm]{\wone} (021D-C);
+    \draw(021D-C) edge[stateEdge] (P0P2T2.south);
+    
+    % *******************************************
+    %             Lambdas in Token 2
+    % *******************************************
+    
+    % From 002 to 102
+    \draw(NoPckTk2.east)
+    edge[stateEdge] node[edgeLabel, yshift=-0.2cm]{\lone}
+    (P1P0T2.west);
+    
+    % From 002 to 012
+    \draw($(NoPckTk2.east) + (-0.1cm,-0.3cm)$)
+    edge[stateEdge, bend right=33.5] node[edgeLabel, yshift=-0.2cm]{\ltwo}
+    ($(P0P1T2.west) + (0.05cm,-0.2cm)$);
+    
+    % From 102 to 202
+    \draw($(P1P0T2.north) + (-0.2cm,-0.05cm)$)
+    edge[stateEdge, bend right=22.5] node[edgeLabel, xshift=-0.3cm, yshift=0.2cm]{\lone}
+    ($(P2P0T2.south) + (0.2cm,0.05cm)$);
+    
+    % From 102 to 112
+    \draw($(P1P0T2.north) + (0.2cm,-0.05cm)$)
+    edge[stateEdge, bend left=22.5] node[edgeLabel, xshift=0.15cm, yshift=-0.15cm]{\ltwo}
+    ($(P1P1T2.west) + (0.05cm,-0.2cm)$);
+    
+    % From 012 to 112
+    \draw($(P0P1T2.north) + (-0.2cm,-0.05cm)$)
+    edge[stateEdge, bend right=22.5] node[edgeLabel, xshift=-0.15cm, yshift=-0.1cm]{\lone}
+    ($(P1P1T2.east) + (-0.05cm,-0.2cm)$);
+    
+    % From 012 to 022
+    \draw($(P0P1T2.north) + (0.2cm,-0.05cm)$)
+    edge[stateEdge, bend left=22.5] node[edgeLabel, xshift=0.15cm, yshift=-0.1cm]{\ltwo}
+    ($(P0P2T2.west) + (0.05cm,-0.2cm)$);
+    
+    % From 112 to 212
+    \coordinate (112A) at ($(P1P1T2.north) + (0,0.4cm)$);
+    \coordinate (112B) at ($(P1P1T2.north -| P2P1T2.north) + (0,0.4cm)$);
+    \draw(P1P1T2.north) edge[stateEdgePortion] (112A);
+    \draw(112A) edge[stateEdgePortion] node[edgeLabel, yshift=0.1cm]{\lone} (112B);
+    \draw(112B) edge[stateEdge] (P2P1T2.north);
+    
+    % From 112 to 122
+    \coordinate (112C) at ($(P1P1T2.south) + (0,-1.4cm)$);
+    \coordinate (112D) at ($(P1P1T2.south -| P1P2T2.south) + (0,-1.4cm)$);
+    \draw(P1P1T2.south) edge[stateEdgePortion] (112C);
+    \draw(112C) edge[stateEdgePortion] node[edgeLabel, yshift=-0.1cm]{\ltwo} (112D);
+    \draw(112D) edge[stateEdge] (P1P2T2.south);
+    
+    % From 022 to 122
+    \draw($(P0P2T2.east) + (-0.05cm,0.2cm)$)
+    edge[stateEdge, bend left=22.5] node[edgeLabel, xshift=0.15cm, yshift=-0.3cm]{\lone}
+    (P1P2T2.north);
+    
+    % From 202 to 212
+    \coordinate (202A) at ($(P2P0T2.east -| P2P1T2.north)$);
+    \draw(P2P0T2.east) edge[stateEdgePortion] node[edgeLabel, xshift=-1.2cm, yshift=0.1cm]{\ltwo} (202A);
+    \draw(202A) edge[stateEdge] (P2P1T2.north);
+    
+    % From 212 to 222
+    \draw(P2P1T2.south)
+    edge[stateEdge] node[edgeLabel, xshift=-0.2cm, yshift=0.1cm]{\ltwo}
+    (P2P2T2.north);
+    
+    % From 122 to 222
+    \draw($(P1P2T2.south) + (-0.2cm,0.05cm)$)
+    edge[stateEdge, bend left=22.5] node[edgeLabel, xshift=-0.35cm, yshift=-1cm]{\lone}
+    ($(P2P2T2.east) + (-0.1cm,0.3cm)$);
+    
+    % *******************************************
+    %               Mus in Token 2
+    % *******************************************
+    
+    % From 012 to 002D
+    \draw($(P0P1T2.east) + (-0.1cm,-0.3cm)$)
+    edge[stateEdge, bend right=50.5] node[edgeLabel, yshift=-0.2cm]{\mtwo}
+    ($(P0P0T2D.west) + (0.1cm,-0.3cm)$);
+    
+    % From 022 to 012D
+    \draw($(P0P2T2.east) + (-0.1cm,0.3cm)$)
+    edge[stateEdge, bend left=22.5] node[edgeLabel, yshift=-0.2cm]{\mtwo}
+    ($(P0P1T2D.west) + (0.1cm,0.3cm)$);
+    
+    % From 122 to 112D
+    \draw($(P1P2T2.east) + (-0.1cm,-0.3cm)$)
+    edge[stateEdge, bend right=22.5] node[edgeLabel, yshift=-0.2cm]{\mtwo}
+    ($(P1P1T2D.west) + (0.1cm,-0.3cm)$);
+    
+    % From 112 to 102D
+    \draw(P1P1T2.south)
+    edge[stateEdge, bend right=62.5] node[edgeLabel, xshift=0.55cm, yshift=-0.25cm]{\mtwo}
+    ($(P1P0T2D.south) + (-0.3cm,0.1cm)$);
+    
+    % From 212 to 202D
+    \draw($(P2P1T2.south) + (0.3cm,0.1cm)$)
+    edge[stateEdge, bend right=22.5] node[edgeLabel, yshift=-0.2cm]{\mtwo}
+    ($(P2P0T2D.south) + (-0.3cm,0.1cm)$);
+    
+    % From 222 to 212D
+    \draw(P2P2T2.east)
+    edge[stateEdge, bend right=70.5] node[edgeLabel, yshift=-0.2cm]{\mtwo}
+    (P2P1T2D.south);
+    
+    % *******************************************
+    %             Omegas in Token 2
+    % *******************************************
+    
+    % From 002 to 001
+    \draw($(NoPckTk2.north) + (-0.2cm,-0.05cm)$)
+    edge[stateEdge, bend left=15.5] node[edgeLabel, xshift=0.25cm]{\wtwo}
+    ($(NoPckTk1.south) + (-0.2cm,0.05cm)$);
+    
+    % From 102 to 101
+    \draw(P1P0T2.north)
+    edge[stateEdge] node[edgeLabel, xshift=0.25cm]{\wtwo}
+    (P1P0T1.south);
+    
+    % From 002D to 001
+    \draw(P0P0T2D.west)
+    edge[stateEdge] node[edgeLabel, xshift=3.8cm, yshift=-3.6cm]{\wtwo}
+    (NoPckTk1.east);
+    
+    % From 202 to 201
+    \draw(P2P0T2.north)
+    edge[stateEdge] node[edgeLabel, xshift=0.3cm, yshift=-0.3cm]{\wtwo}
+    (P2P0T1.south);
+    
+    % From 012D to 011
+    \draw(P0P1T2D.north)
+    edge[stateEdge] node[edgeLabel, xshift=2.6cm, yshift=-2.4cm]{\wtwo}
+    (P0P1T1.east);
+    
+    % From 112D to 111
+    \draw($(P1P1T2D.north) + (-0.3cm,-0.1cm)$)
+    edge[stateEdge] node[edgeLabel, xshift=2.8cm, yshift=-2.8cm]{\wtwo}
+    (P1P1T1.east);
+    
+    % From 212D to 211
+    \draw($(P2P1T2D.north) + (-0.3cm,-0.1cm)$)
+    edge[stateEdge] node[edgeLabel, xshift=2.6cm, yshift=-2.6cm]{\wtwo}
+    (P2P1T1.east);
+    
+    % From 202D to 201
+    \coordinate (202D-A) at ($(P2P0T2D.south) + (0,-5.2cm)$);
+    \coordinate (202D-B) at ($(P2P0T2D.south -| P2P0T1.south) + (0,-5.2cm)$);
+    \coordinate (202D-C) at ($(P2P0T1.west) + (-0.2cm,0)$);
+    \draw(P2P0T2D.south) edge[stateEdgePortion] (202D-A);
+    \draw(202D-A) edge[stateEdgePortion] node[edgeLabel, yshift=-0.1cm]{\wtwo} (202D-B);
+    \draw(202D-B) edge[stateEdgePortion] (202D-C);
+    \draw(202D-C) edge[stateEdge] (P2P0T1.west);
+    
+    % From 102D to 101
+    \coordinate (102D-A) at ($(P1P0T2D.south) + (0,-6.2cm)$);
+    \coordinate (102D-B) at ($(P1P0T2D.south -| P1P0T1.south) + (-0.8cm,-6.2cm)$);
+    \draw(P1P0T2D.south) edge[stateEdgePortion] (102D-A);
+    \draw(102D-A) edge[stateEdgePortion] node[edgeLabel, yshift=-0.1cm]{\wtwo} (102D-B);
+    \draw(102D-B) edge[stateEdge] ($(P1P0T1.south) + (-0.2cm,0.05cm)$);
+
+  \end{tikzpicture}
+  \end{preview}
+\end{document}
