@@ -14,6 +14,21 @@ function main()
   local q = matrix:new(token_ring_mat())
   local qt = matrix.transpose(q)
   local qt_inv = matrix.invert(qt)
+  local pi_vector = calculate_sys_pi(qt_inv)
+
+  print("Pi Values Vector:\n")
+
+  for i = 1, states do
+    print(string.format("P%d [%.8f]", i, pi_vector[i]))
+  end
+end
+
+function calculate_sys_pi(inv_mtx)
+  local pi_vec = {}
+  for i = 1, states do
+    pi_vec[i] = inv_mtx[i][states]
+  end
+  return pi_vec
 end
 
 function token_ring_mat()
