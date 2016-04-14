@@ -1,0 +1,99 @@
+\documentclass[12pt,letterpaper,oneside]{article}
+
+\usepackage[margin=2.5cm]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{endnotes}
+\usepackage{epsfig}
+
+\setlength{\parskip}{12pt}
+
+\begin{document}
+
+  \begin{titlepage}
+    \centering
+    {\LARGE Tecnológico de Monterrey Campus Estado de México \\}
+    \vspace{2.5cm}
+    {\Large Análisis del Modelo Token-Ring Extendido \\}
+    \vspace{2.5cm}
+    {\Large\slshape Iván David Díaz Sánchez \sffamily A01371166 \\}
+    \vspace{0.5cm}
+    {\Large\slshape Kimberly Giovanna Coronel Sánchez \sffamily A01166094 \\}
+    \vspace{2.5cm}
+    {\Large Métodos Cuantitativos y Simulación \par}
+    \vspace{1.5cm}
+    {\large 13 de Abril del 2016 \\}
+    \vfill
+    \large Profesor de la Materia\\
+    \large Dr. Raúl Monroy Borja
+    \vfill
+  \end{titlepage}
+  
+  \begin{abstract}
+    En este escrito, se modeló y analizó una arquitectura Token-Ring con 3 computadoras conectadas. El análisis abarca el comportamiento dinámico de dicho sistema bajo condiciones normales y escenarios simulados, los cuales suponen la modificación de diversas tasas en el envío de paquetes.
+  \end{abstract}
+  
+  \section{Introducción}
+    La topología conocida como \textit{Token Ring} consiste en \textit{N} computadoras conectadas secuencialmente formando un anillo (de ahí proviene el nombre), es decir, la última va conectada a la primera. Fue introducida por IBM en el año 1984 y fue estandarizada inmediatamente. Sin embargo, con el auge de \textit{Ethernet} y su gran escalabilidad, \textit{Token Ring} fue desplazado en la mayoría de los ámbitos.
+    
+    \textit{Token Ring} está conformada de acuerdo a un protocolo diseñado para redes de área local. Dicho protocolo consiste en llevar registro de qué computadora tiene el turno para enviar paquetes mediante un token. Una vez que se usa, la computadora debe de pasar el token a la siguiente dentro de la red.\par
+    
+    Gracias a este protocolo, se pueden evitar inconsistencias dentro de la red generadas por paquetes mixtos que pudiesen chocar. Además, es posible extender el modelo de acuerdo a necesidades particulares que se presentaran, como se llevó a cabo para el análisis de diversos parámetros en este trabajo. No obstante su desuso, es un sistema excelente para los propósitos de aprendizaje de Cadenas Markovianas en la materia.
+    
+    \section{Especificaciones del Caso de Estudio}
+      \noindent Los escenarios considerados en el análisis realizado se despliegan en la lista que aparece a continuación:
+    
+      \begin{itemize}
+        \item[\textendash] Condiciones de Operación Normales
+        \item[\textendash] Disminución en la Tasa de Envío de Paquetes
+        \item[\textendash] Disminución en la Tasa de Producción de Paquetes
+      \end{itemize}
+      
+    \section{Consideraciones en el Modelado}
+      La extensión propuesta para la arquitectura de \textit{Token Ring} consiste en añadir un buffer capaz de almacenar hasta un paquete adicional en cada PC. El funcionamiento del token permaneció igual al del esquema original, el cual indica que cada PC puede transmitir a lo más un paquete por turno.
+      
+      \subsection{De las PCs}
+        
+        \begin{itemize}
+          \item Pueden almacenar máximo 2 paquetes: 1 listo para ser transmitido y otro en el buffer temporal.
+          \item Pueden estar en 3 posibles estados: No tener paquetes pendientes, tener un paquete listo, y tener tanto uno listo, como uno pendiente en su buffer.
+          \item Generan los paquetes con una tasa $\lambda$.
+          \item Pueden transmitir a lo más un paquete por uso del token.
+        \end{itemize}
+        
+      \subsection{Del Token}
+      
+        \begin{itemize}
+          \item Solamente hay uno por red.
+          \item Una vez utilizado, únicamente puede ser transmitido a la siguiente PC.
+          \item Si la PC no tiene paquetes para enviar, el token puede ser transmitido sin haberse usado.
+        \end{itemize}
+        
+      \section{Análisis}
+      \noindent A continuación se presenta la interpretación del análisis de los diferentes escenarios planteados en la topología previamente descrita.
+      
+      \subsection{Primer Escenario: Condiciones Normales}
+      Al realizar las observaciones correspondientes sobre el sistema, sus estados, y la probabilidad de que dicho sistema se encuentre en cada uno de estos estados, se puede observar que la utilización del sistema en general se encuentra por debajo del 50\%, por lo que es posible incrementar la carga de paquetes de red sin impactar negativamente el rendimiento. Un rendimiento bajo significa que el sistema tiene capacidad para mayores cargas de trabajo.
+      
+      Posteriormente, la probabilidad de que una determinada PC tenga paquetes listos se determina mediante la siguiente operación:
+      
+      $\displaystyle\sum_{i=1}^{S_n} \vec{p_i}$ , tal que en el estado $S_i$ la PC designada tenga un valor \textgreater \space 0.
+      
+      Donde:
+      \begin{itemize}
+        \item $S_n$ es el número de estados
+        \item $\vec{p_i}$ es la probabilidad de estar en el estado $\vec{p_i}$
+      \end{itemize}
+      
+      Como se muestra en [1], existe una probabilidad del 18\% aproximadamente de que una determinada PC se encuentre lista para enviar.
+      
+      \subsection{Segundo Escenario: Disminución de $\mu$}
+      En este segundo escenario, se pudo observar que al disminuirse la tasa de envío de paquetes, consecuentemente se redujo drásticamente la utilización del sistema, así como su desempeño. Los cálculos se muestran detalladamente en [1].
+      
+      \subsection{Tercer Escenario: Incremento de $\lambda$}
+      Por último, en este escenario se incrementó la tasa de producción o generación de paquetes. Tomando en cuenta las observaciones del primer escenario, podemos concluir que al generar más paquetes por unidad de tiempo, entonces se aprovechan mejor las capacidades que ofrece el sistema, ya que tanto el desempeño como la utilización se vieron incrementados.
+    
+    \section{Referencia}
+      [1] \texttt{Analysis.xlsx}
+  
+\end{document}
